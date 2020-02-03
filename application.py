@@ -7,8 +7,8 @@ from datetime import datetime
 import math
 
 # Init flask
-app = Flask(__name__)
-
+application = Flask(__name__)
+app = application
 # Configs
 app.config.from_object('config')
 app.config.from_pyfile('config.py')
