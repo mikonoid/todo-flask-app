@@ -59,7 +59,7 @@ def getTask(id):
 def updateTask(taskID):
 	the_task = Task.query.filter_by(idTask = taskID).first()
 
-	return render_template('update.html', task = the_task)
+	return render_template('edit.html', task = the_task)
 
 @app.route('/do_updatetask', methods=['POST'])
 def do_updatetask():
