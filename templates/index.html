@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block body %}
-<h1>Test app on Python+Flask+Mysql</h1>
+<h1>Test app on Python+Flask+SQLite</h1>
 <hr>
 <form action="/task" method="post">
 	<div class="form-group">
@@ -26,7 +26,7 @@
 			{% else %}
 			<span>
 			{% endif %}
-			{{ task.task }} - 
+			{{ task.task }} -
 			</span>
 			{% if task.status == 'complete' %}
 			<a href="/uncomplete/{{ task.idTask }}">Todo</a> |
