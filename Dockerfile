@@ -1,14 +1,24 @@
-FROM python
+FROM alpine
 
 MAINTAINER Mike Ivanov mikonoid@gmail.com
 
-COPY ./requirements.txt /app/requirements.txt
+COPY . /app
 
 WORKDIR /app
+
+RUN apk add --update-cache \
+    python \
+    python-dev \
+    py-pip \
+    build-base \
+  && pip install virtualenv \
+  && rm -rf /var/cache/apk/*
 
 RUN pip install -r requirements.txt
 
 COPY . /app
+
+EXPOSE 5000
 
 ENTRYPOINT [ "python" ]
 
