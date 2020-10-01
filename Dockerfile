@@ -1,4 +1,4 @@
-FROM alpine
+FROM alpine:3.10
 
 MAINTAINER Mike Ivanov mikonoid@gmail.com
 
@@ -6,7 +6,7 @@ COPY . /app
 
 WORKDIR /app
 
-RUN apk add --update-cache \
+RUN apk add --update --no-cache \
     python \
     python-dev \
     py-pip \
