@@ -16,7 +16,7 @@ spec:
         app: todo
     spec:
       containers:
-      - image: docker.io/mk51/todo:latest
+      - image: index.docker.io/mk51/todo:latest
         imagePullPolicy: Always
         name: todo
         ports:
