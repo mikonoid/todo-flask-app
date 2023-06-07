@@ -6,7 +6,8 @@ on:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
+  cancel-in-queue: false
 
 jobs:
   remove:
