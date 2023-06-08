@@ -3,16 +3,16 @@ on:
   push:
     branches:
       - master
+  pull_request:
+    branches: 
+      - master
+    types: [closed]
 
 
 jobs:
   remove:
-    name: Remove Feature Branch Deployment
+    name: Test PR comment
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        node-version: [14.x]
     # steps:
     #   - name: Get Pull Request Number
     #     run: echo "PULL_NUMBER=$(echo "$GITHUB_REF" | awk -F / '{print $3}')" >> $GITHUB_ENV
@@ -22,7 +22,7 @@ jobs:
     #     run: echo ${{ env.PULL_NUMBER }}
     steps:
     - uses: actions/github-script@v6
-      if: github.event.pull_request.merged == true
+      if: github.event.pull_request.merged
       id: get_issue_number
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -42,11 +42,11 @@ jobs:
           }
         result-encoding: string
     - name: Issue number
-      if: github.event.pull_request.merged == true
+      if: github.event.pull_request.merged
       run: echo '${{steps.get_issue_number.outputs.result}}'
     - name: Comment PR
       uses: thollander/actions-comment-pull-request@v2
-      if: github.event.pull_request.merged == true
+      if: github.event.pull_request.merged
       with:
         message: |
           Test url https://wpp.com ! :wave:
