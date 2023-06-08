@@ -1,12 +1,9 @@
 name: Remove branch
 on:
-  delete:
+  push:
     branches:
-      - '**'
+      - main
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false
 
 jobs:
   remove:
@@ -19,8 +16,8 @@ jobs:
     steps:
     - name: Set Stage Name
       run: |
-        echo "Remove branch"
-        sleep 300
+        echo "testbranch"
+        sleep 5
     - name: Test
       uses: actions/github-script@0.3.0
       with:
