@@ -43,3 +43,10 @@ jobs:
         result-encoding: string
     - name: Issue number
       run: echo '${{steps.get_issue_number.outputs.result}}'
+
+    - name: Comment PR
+      uses: thollander/actions-comment-pull-request@v2
+      with:
+        message: |
+          Hello world ! :wave:
+        pr_number: '${{steps.get_issue_number.outputs.result}}'
