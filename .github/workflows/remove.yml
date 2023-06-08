@@ -21,11 +21,4 @@ jobs:
       run: |
         echo "Remove branch"
         sleep 300
-    - name: Test
-      uses: actions/github-script@0.3.0
-      with:
-        github-token: ${{github.token}}
-        script: |
-          const core = require('@actions/core')
-          const prNumber = context.payload.number;
-          core.exportVariable('PULL_NUMBER', prNumber);
+
