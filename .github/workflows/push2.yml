@@ -13,10 +13,31 @@ jobs:
       fail-fast: false
       matrix:
         node-version: [14.x]
-    steps:
-      - name: Get Pull Request Number
-        run: echo "PULL_NUMBER=$(echo "$GITHUB_REF" | awk -F / '{print $3}')" >> $GITHUB_ENV
-        shell: bash
+    # steps:
+    #   - name: Get Pull Request Number
+    #     run: echo "PULL_NUMBER=$(echo "$GITHUB_REF" | awk -F / '{print $3}')" >> $GITHUB_ENV
+    #     shell: bash
 
-      - name: show PR
-        run: echo ${{ env.PULL_NUMBER }}
+    #   - name: show PR
+    #     run: echo ${{ env.PULL_NUMBER }}
+    steps:
+    - uses: actions/github-script@v6
+      id: get_issue_number
+      with:
+        script: |
+          if (context.issue.number) {
+            // Return issue number if present
+            return context.issue.number;
+          } else {
+            // Otherwise return issue number from commit
+            return (
+              await github.rest.repos.listPullRequestsAssociatedWithCommit({
+                commit_sha: context.sha,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+              })
+            ).data[0].number;
+          }
+        result-encoding: string
+    - name: Issue number
+      run: echo '${{steps.get_issue_number.outputs.result}}'
