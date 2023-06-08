@@ -22,6 +22,7 @@ jobs:
     #     run: echo ${{ env.PULL_NUMBER }}
     steps:
     - uses: actions/github-script@v6
+      if: github.event_name == 'pull_request' && github.event.action == 'closed'
       id: get_issue_number
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
