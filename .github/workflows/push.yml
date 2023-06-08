@@ -1,4 +1,4 @@
-name: Remove branch
+name: Get PR
 on:
   push:
     branches:
@@ -21,7 +21,7 @@ jobs:
     - name: Get Pull Request Number
       id: pr
       run: |
-        echo "The PR is: PR_NUMBER" 
+        echo "The PR is: $PR_NUMBER" 
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         PR_NUMBER: ${{ github.event.number }}
