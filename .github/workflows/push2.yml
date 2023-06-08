@@ -14,22 +14,9 @@ jobs:
       matrix:
         node-version: [14.x]
     steps:
-      - id: find-pull-request
-        uses: jwalton/gh-find-current-pr@v1
-        with:
-          # Can be "open", "closed", or "all".  Defaults to "open".
-          state: all
-      - name: create TODO/FIXME comment body
-        id: comment-body
-        run: |
-          yarn leasot '**/*.{js,ts,jsx,tsx}' --ignore 'node_modules/**/*' --exit-nicely --reporter markdown > TODO.md
-          body="$(sed 1,2d TODO.md)"
-          body="${body//'%'/'%25'}"
-          body="${body//$'\n'/'%0A'}"
-          body="${body//$'\r'/'%0D'}" 
-          echo "::set-output name=body::$body"
-      - name: post TODO/FIXME comment to PR
-        uses: peter-evans/create-or-update-comment@v2
-        with:
-          issue-number: ${{ steps.find-pull-request.outputs.number }}
-          body: ${{ steps.comment-body.outputs.body }}
+      - name: Get Pull Request Number
+        run: echo "PULL_NUMBER=$(echo "$GITHUB_REF" | awk -F / '{print $3}')" >> $GITHUB_ENV
+        shell: bash
+
+      - name: show PR
+        run: echo ${{ env.PULL_NUMBER }}
