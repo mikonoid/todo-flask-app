@@ -22,7 +22,7 @@ jobs:
     #     run: echo ${{ env.PULL_NUMBER }}
     steps:
     - uses: actions/github-script@v6
-      if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+      if: github.event.pull_request.merged == true
       id: get_issue_number
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -42,11 +42,11 @@ jobs:
           }
         result-encoding: string
     - name: Issue number
-      if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+      if: github.event.pull_request.merged == true
       run: echo '${{steps.get_issue_number.outputs.result}}'
     - name: Comment PR
       uses: thollander/actions-comment-pull-request@v2
-      if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+      if: github.event.pull_request.merged == true
       with:
         message: |
           Test url https://wpp.com ! :wave:
