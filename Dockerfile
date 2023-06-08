@@ -1,7 +1,5 @@
 FROM alpine:3.10
 
-MAINTAINER Mike Ivanov mikonoid@gmail.com
-
 COPY . /app
 
 WORKDIR /app
