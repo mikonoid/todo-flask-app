@@ -14,26 +14,8 @@ jobs:
       matrix:
         node-version: [14.x]
     steps:
-      - uses: actions/github-script@v6
-        id: get_issue_number
-        env: 
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          script: |
-            if (context.issue.number) {
-              // Return issue number if present
-              return context.issue.number;
-            } else {
-              // Otherwise return issue number from commit
-              return (
-                await github.rest.repos.listPullRequestsAssociatedWithCommit({
-                  commit_sha: context.sha,
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                })
-              ).data[0].number;
-            }
-          result-encoding: string
       - name: Issue number
-        run: echo '${{steps.get_issue_number.outputs.result}}'
+        run: |
+           PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
+           echo $PR_NUMBER
   
