@@ -41,12 +41,17 @@ jobs:
     - name: Issue number
       # if: github.event.pull_request.merged == true
       run: echo '${{steps.get_issue_number.outputs.result}}'
+    - name: Set outputs
+      id: vars
+      run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+    - name: Check outputs
+      run: echo ${{ steps.vars.outputs.sha_short }}
     - name: Comment PR
       uses: thollander/actions-comment-pull-request@v2
       # if: github.event.pull_request.merged == true
       with:
         message: |
-          test url https://wpp.com ! :wave:
+          test ${{ steps.vars.outputs.sha_short }} :wave:
         pr_number: ${{steps.get_issue_number.outputs.result}}
         reactions: eyes, rocket
         comment_tag: test
