@@ -7,12 +7,8 @@ on:
 
 jobs:
   remove:
-    name: Remove Feature Branch Deployment
+    name: PR comment
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        node-version: [14.x]
     steps:
       - name: get PR
         id: get_issue_number

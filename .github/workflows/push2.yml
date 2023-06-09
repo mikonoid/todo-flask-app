@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - master
+  pull_request:
+      - [created]
 
 jobs:
   test_pr:
@@ -44,9 +46,10 @@ jobs:
       # if: github.event.pull_request.merged == true
       with:
         message: |
-          Test url https://wpp.com ! :wave:
+          test url https://wpp.com ! :wave:
         pr_number: ${{steps.get_issue_number.outputs.result}}
         reactions: eyes, rocket
+        comment_tag: test
     - name: Test task for master branch
       # if: github.ref == 'refs/heads/master'
       run: echo 'working'
