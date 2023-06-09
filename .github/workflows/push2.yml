@@ -46,7 +46,7 @@ jobs:
     - name: Comment PR
       uses: thollander/actions-comment-pull-request@v2
       env: 
-        commitmsg: $GITHUB_SHA
+        commitmsg: ${{ github.sha }}
       # if: github.event.pull_request.merged == true
       with:
         message: |
