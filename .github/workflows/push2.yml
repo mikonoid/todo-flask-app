@@ -4,10 +4,7 @@ on:
     branches:
       - master
   pull_request:
-    types: [opened, reopened, edited]
-    branches:
-      - dev
-      - master
+    types: [opened, reopened, edited, synchronize]
 
 jobs:
   test_pr:
