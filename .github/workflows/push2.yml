@@ -41,6 +41,8 @@ jobs:
     - name: Issue number
       # if: github.event.pull_request.merged == true
       run: echo '${{steps.get_issue_number.outputs.result}}'
+    - name: Get sha
+      run: echo ${{ github.sha }}
     - name: Comment PR
       uses: thollander/actions-comment-pull-request@v2
       env: 
