@@ -49,9 +49,11 @@ jobs:
     - name: Comment PR
       uses: thollander/actions-comment-pull-request@v2
       # if: github.event.pull_request.merged == true
+      env:
+        commitmsg: ${{ steps.vars.outputs.sha_short }}
       with:
         message: |
-          test "${{ steps.vars.outputs.sha_short }}" :wave:
+          test $commitmsg :wave:
         pr_number: ${{steps.get_issue_number.outputs.result}}
         reactions: eyes, rocket
         comment_tag: test
