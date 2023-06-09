@@ -6,7 +6,8 @@ on:
   pull_request:
     types: [opened, reopened, edited]
     branches:
-      - 'dev/**'
+      - dev
+      - master
 
 jobs:
   test_pr:
