@@ -49,7 +49,7 @@ jobs:
             const body = `${{ github.sha }}`;
 
             await github.rest.issues.createComment({
-              issue_number: context.issue.number,
+              issue_number: '${{steps.get_issue_number.outputs.result}}',
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: body
