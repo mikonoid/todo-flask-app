@@ -44,6 +44,7 @@ jobs:
     - name: Add comment to PR
       uses: actions/github-script@v6
       with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
             // Get the existing comments.
             const {data: comments} = await github.rest.issues.listComments({
