@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - master
-  pull_request:
+  issues:
     types: [opened, reopened, edited, synchronize]
 
 jobs:
@@ -41,12 +41,14 @@ jobs:
     - name: Issue number
       # if: github.event.pull_request.merged == true
       run: echo '${{steps.get_issue_number.outputs.result}}'
+    - name: Get sha
+      run: echo ${{ github.sha }}
     - name: Comment PR
       uses: thollander/actions-comment-pull-request@v2
       # if: github.event.pull_request.merged == true
       with:
         message: |
-          test url https://wpp.com ! :wave:
+          test ${{ github.sha }} :wave:
         pr_number: ${{steps.get_issue_number.outputs.result}}
         reactions: eyes, rocket
         comment_tag: test
