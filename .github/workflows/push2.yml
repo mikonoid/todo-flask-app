@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - master
+  issues:
+    types: [opened, reopened, edited, synchronize]
 
 jobs:
   test_pr:
