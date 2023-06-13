@@ -11,23 +11,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-    # - name: Check if PR exists
-    #   id: check
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #   run: |
-    #     prs=$(gh pr list \
-    #       --repo "$GITHUB_REPOSITORY" \
-    #       --json baseRefName,headRefName \
-    #       --jq '
-    #           map(select(.baseRefName == "master" and .headRefName == "dev"))
-    #           | length
-    #       ')
-    #     if ((prs > 0)); then
-    #       echo "skip=true" >> "$GITHUB_OUTPUT"
-    #     fi
+    - name: Check if PR exists
+      id: check
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        prs=$(gh pr list \
+          --repo "$GITHUB_REPOSITORY" \
+          --json baseRefName,headRefName \
+          --jq '
+              map(select(.baseRefName == "master" and .headRefName == "dev"))
+              | length
+          ')
+        if ((prs > 0)); then
+          echo "skip=true" >> "$GITHUB_OUTPUT"
+        fi
     - uses: actions/github-script@v6
-      # if: 'steps.check.outputs.skip'
+      if: 'steps.check.outputs.skip'
       id: get_issue_number
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -47,11 +47,11 @@ jobs:
           }
         result-encoding: string
     - name: Issue number
-      # if: 'steps.check.outputs.skip'
+      if: 'steps.check.outputs.skip'
       run: echo '${{steps.get_issue_number.outputs.result}}'
 
     - name: Add comment to PR
-      # if: 'steps.check.outputs.skip'
+      if: 'steps.check.outputs.skip'
       uses: actions/github-script@v6
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
