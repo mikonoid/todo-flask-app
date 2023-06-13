@@ -1,82 +1,82 @@
-name: Get PR and comment
-on:
-  push:
-    branches:
-      - master
-      - dev
+# name: Get PR and comment
+# on:
+#   push:
+#     branches:
+#       - master
+#       - dev
 
-jobs:
-  test_pr:
-    name: Test PR comment
-    runs-on: ubuntu-latest
-    steps:
+# jobs:
+#   test_pr:
+#     name: Test PR comment
+#     runs-on: ubuntu-latest
+#     steps:
 
-    - name: Check if PR exists
-      id: check
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        prs=$(gh pr list \
-          --repo "$GITHUB_REPOSITORY" \
-          --json baseRefName,headRefName \
-          --jq '
-              map(select(.baseRefName == "master" and .headRefName == "dev"))
-              | length
-          ')
-        if ((prs > 0)); then
-          echo "skip=true" >> "$GITHUB_OUTPUT"
-        fi
-    - uses: actions/github-script@v6
-      if: 'steps.check.outputs.skip'
-      id: get_issue_number
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        script: |
-          if (context.issue.number) {
-            // Return issue number if present
-            return context.issue.number;
-          } else {
-            // Otherwise return issue number from commit
-            return (
-              await github.rest.repos.listPullRequestsAssociatedWithCommit({
-                commit_sha: context.sha,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-              })
-            ).data[0].number;
-          }
-        result-encoding: string
-    - name: Issue number
-      if: 'steps.check.outputs.skip'
-      run: echo '${{steps.get_issue_number.outputs.result}}'
+#     - name: Check if PR exists
+#       id: check
+#       env:
+#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#       run: |
+#         prs=$(gh pr list \
+#           --repo "$GITHUB_REPOSITORY" \
+#           --json baseRefName,headRefName \
+#           --jq '
+#               map(select(.baseRefName == "master" and .headRefName == "dev"))
+#               | length
+#           ')
+#         if ((prs > 0)); then
+#           echo "skip=true" >> "$GITHUB_OUTPUT"
+#         fi
+#     - uses: actions/github-script@v6
+#       if: 'steps.check.outputs.skip'
+#       id: get_issue_number
+#       with:
+#         github-token: ${{ secrets.GITHUB_TOKEN }}
+#         script: |
+#           if (context.issue.number) {
+#             // Return issue number if present
+#             return context.issue.number;
+#           } else {
+#             // Otherwise return issue number from commit
+#             return (
+#               await github.rest.repos.listPullRequestsAssociatedWithCommit({
+#                 commit_sha: context.sha,
+#                 owner: context.repo.owner,
+#                 repo: context.repo.repo,
+#               })
+#             ).data[0].number;
+#           }
+#         result-encoding: string
+#     - name: Issue number
+#       if: 'steps.check.outputs.skip'
+#       run: echo '${{steps.get_issue_number.outputs.result}}'
 
-    - name: Add comment to PR
-      if: 'steps.check.outputs.skip'
-      uses: actions/github-script@v6
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        script: |
-          const {data: comments} = await github.rest.issues.listComments({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            issue_number: '${{steps.get_issue_number.outputs.result}}',
-          })
+#     - name: Add comment to PR
+#       if: 'steps.check.outputs.skip'
+#       uses: actions/github-script@v6
+#       with:
+#         github-token: ${{ secrets.GITHUB_TOKEN }}
+#         script: |
+#           const {data: comments} = await github.rest.issues.listComments({
+#             owner: context.repo.owner,
+#             repo: context.repo.repo,
+#             issue_number: '${{steps.get_issue_number.outputs.result}}',
+#           })
         
-          const botComment = comments.find(comment => comment.user.id === 41898282)                                                                       
-          const commentBody = "Hello from actions/github-script! (${{ github.sha }})"                  
+#           const botComment = comments.find(comment => comment.user.id === 41898282)                                                                       
+#           const commentBody = "Hello from actions/github-script! (${{ github.sha }})"                  
         
-            if (botComment) {
-              await github.rest.issues.updateComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                comment_id: botComment.id,
-                body: commentBody
-              })
-              } else {
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: '${{steps.get_issue_number.outputs.result}}',
-                body: commentBody
-              })
-            }
+#             if (botComment) {
+#               await github.rest.issues.updateComment({
+#                 owner: context.repo.owner,
+#                 repo: context.repo.repo,
+#                 comment_id: botComment.id,
+#                 body: commentBody
+#               })
+#               } else {
+#               await github.rest.issues.createComment({
+#                 owner: context.repo.owner,
+#                 repo: context.repo.repo,
+#                 issue_number: '${{steps.get_issue_number.outputs.result}}',
+#                 body: commentBody
+#               })
+#             }
