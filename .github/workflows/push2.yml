@@ -1,7 +1,8 @@
 name: Get PR and comment
 on:
-  pull_request:
-    types: [opened, reopened, edited, synchronize]
+  push:
+    branches:
+      - dev
 
 jobs:
   test_pr:
