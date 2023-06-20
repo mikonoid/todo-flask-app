@@ -95,6 +95,7 @@ jobs:
   tag_latest:
     if: |
       always() &&
+      !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
     needs: [deploy-main, deploy-prd, deploy-test, bump]
     name: Tag deployment if success
