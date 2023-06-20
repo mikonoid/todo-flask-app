@@ -5,24 +5,23 @@ on:
       - dev
 
 jobs:
-  test_pr:
-    name: Test PR comment
+  tag-test:
+    name: Artifact with tag
     runs-on: ubuntu-latest
     steps:
-    - name: Create a file
+    - name: Create a file with tag
       run: echo ${{ github.ref }} > tag.txt
-    - name: Accidentally upload to the same artifact via multiple jobs
+    - name: Upload artifact
       uses: actions/upload-artifact@v3
       with:
-          name: my-artifact
-          path: ${{ github.workspace }}
+        name: tag_artifact
+        path: ${{ github.workspace }}/tag.txt
     - name: Get artifact
-      uses: actions/download-artifact@master
+      uses: actions/download-artifact@v3
       with:
-        name: my-artifact
-        path: ${{ github.workspace }}
+        name: tag_artifact
     - name: Print the final result
       shell: bash
       run: |
         value=`cat tag.txt`
-        echo The result is $valuet
+        echo The result is $value
