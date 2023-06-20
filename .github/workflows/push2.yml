@@ -9,13 +9,14 @@ jobs:
     name: Artifact with tag
     runs-on: ubuntu-latest
     steps:
-    # - name: Create a file with tag
-    #   run: echo ${{ github.ref }} > tag.txt
-    # - name: Upload artifact
-    #   uses: actions/upload-artifact@v3
-    #   with:
-    #     name: tag_artifact
-    #     path: ${{ github.workspace }}/tag.txt
+    - name: Create a file with tag
+      id: create_tag
+      run: echo "tag_v1.10.100"
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: tag_artifact
+        path: ${{ github.workspace }}/tag.txt
     - name: Get artifact
       uses: actions/download-artifact@v3
       with:

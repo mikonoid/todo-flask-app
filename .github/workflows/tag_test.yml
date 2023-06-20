@@ -1,0 +1,104 @@
+name: Create New Version Tag and Release
+on:
+  push:
+    branches:
+      - dev
+
+
+jobs:
+  bump:
+    name: 'Bump'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [16.x]
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: echo "bump"
+    
+
+  deploy-main:
+    # We deploy main so FE developers have a ready-made backend to use.
+    name: Deploy Main
+    runs-on: ubuntu-latest
+    needs:
+    - bump
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [16.x]
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        ref: ${{ needs.bump.outputs.new-version }}
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: echo "deploy main"
+
+
+  deploy-test:
+    name: Deploy Test
+    runs-on: ubuntu-latest
+    needs:
+    - bump
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [16.x]
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        ref: ${{ needs.bump.outputs.new-version }}
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: echo "deploy test"
+
+  deploy-prd:
+    name: Deploy Prd
+    runs-on: ubuntu-latest
+    needs:
+    - bump
+    - deploy-test
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [16.x]
+    steps:
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: echo "deploy prod"
+
+  job-check:
+    runs-on: ubuntu-latest
+    if: ${{ always() && contains(join(needs.*.result, ','), 'success') }}
+    needs: [deploy-main, deploy-prd, deploy-test, bump]
+    steps:
+      - name: Check job dependency       
+        env:
+          NEEDS: ${{ toJSON(needs) }}
+        run: |
+          echo "$NEEDS"
+
+  tag_latest:
+    if: ${{ always() }}
+    needs: [job-check]
+    name: Tag deployment if success
+    runs-on: ubuntu-latest 
+    steps:
+    - name: Create a file with tag
+      id: create_tag
+      run: echo "TAG_CREATE=$(echo "tag_v1.10.100")" >> $GITHUB_ENV
+
