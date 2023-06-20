@@ -1,4 +1,4 @@
-name: Get PR and comment
+name: Artifact
 on:
   push:
     branches:
@@ -9,25 +9,6 @@ jobs:
     name: Test PR comment
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/github-script@v6
-      id: get_issue_number
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        script: |
-          if (context.issue.number) {
-            // Return issue number if present
-            return context.issue.number;
-          } else {
-            // Otherwise return issue number from commit
-            return (
-              await github.rest.repos.listPullRequestsAssociatedWithCommit({
-                commit_sha: context.sha,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-              })
-            ).data[0].number;
-          }
-        result-encoding: string
     - name: Create a file
       run: echo ${{ github.ref }} > tag.txt
     - name: Accidentally upload to the same artifact via multiple jobs
@@ -39,6 +20,8 @@ jobs:
       uses: actions/download-artifact@master
       with:
         name: my-artifact
-        path: ${{ github.workspace }}
-    - name: Show artifact
-      run: cat ${{ github.workspace }}/tag.txt
+    - name: Print the final result
+      shell: bash
+      run: |
+        value=`cat tag.txt`
+        echo The result is $valuet
