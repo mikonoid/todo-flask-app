@@ -81,17 +81,6 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: echo "deploy prod"
 
-  # job-check:
-  #   runs-on: ubuntu-latest
-  #   needs: [deploy-main, deploy-prd, deploy-test, bump]
-  #   if: |
-  #     always() &&
-  #     !contains(needs.*.result, 'cancelled')
-  #   # you can add conditions if needed e.g.
-  #   # !contains(needs.*.result, 'failure')
-  #   steps:
-  #     - run: echo "${{ toJSON(needs) }}"
-
   tag_latest:
     if: |
       always() &&
