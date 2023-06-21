@@ -1,0 +1,12 @@
+{
+  "name": "todo-flask-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/mikonoid/todo-flask-app.git",
+  "author": "Mike Ivanov <mikonoid@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.35.1"
+  },
+  "scripts": {}
+}
