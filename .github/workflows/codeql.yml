@@ -61,16 +61,17 @@ jobs:
     - name: Autobuild
       uses: github/codeql-action/autobuild@v2
 
-    - name: Upload SARIF file
-      uses: github/codeql-action/upload-sarif@v2
-      with:
-          # Path to SARIF file relative to the root of the repository
-        sarif_file: python.sarif
-          # Optional category for the results
-          # Used to differentiate multiple results for one commit
-        category: my-analysis-tool
+
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
       with:
         category: "/language:${{matrix.language}}"
+    - name: Upload SARIF file
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+          # Path to SARIF file relative to the root of the repository
+        sarif_file: results/python.sarif
+          # Optional category for the results
+          # Used to differentiate multiple results for one commit
+        category: my-analysis-tool
