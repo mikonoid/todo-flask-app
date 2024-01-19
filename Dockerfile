@@ -1,23 +1,22 @@
-FROM alpine:3.10
-
-COPY . /app
+FROM alpine:3.18
 
 WORKDIR /app
 
+COPY . /app
+
 RUN apk add --update --no-cache \
-    python \
-    python-dev \
-    py-pip \
-    build-base \
-  && pip install virtualenv \
-  && rm -rf /var/cache/apk/*
+    python3 \
+    py3-pip \
+    && pip3 install --upgrade pip \
+    && pip3 install virtualenv \
+    && rm -rf /var/cache/apk/*
+
+RUN virtualenv venv
+
+ENV PATH="/app/venv/bin:$PATH"
 
 RUN pip install -r requirements.txt
 
-COPY . /app
-
 EXPOSE 5000
 
-ENTRYPOINT [ "python" ]
-
-CMD [ "application.py" ]
+CMD ["python", "app.py"]
