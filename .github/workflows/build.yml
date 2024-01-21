@@ -1,0 +1,56 @@
+name: Docker
+
+on:
+
+  release:
+    types: [published]
+
+  push:
+    # Publish `master` as Docker `master-latest` image
+    # Publish for any branch as well
+    branches:
+      - master
+
+env:
+  # TODO: Change variable to your image's name.
+  IMAGE: todo-flask-app
+  REGISTRY: docker.io/mk51
+
+jobs:
+  # Run tests
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run tests
+        run: docker build .
+
+  # Push image to Docker Hub
+  push:
+    # Ensure test job passes before pushing image.
+    needs: test
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build image
+        run: docker build -t $IMAGE -f Dockerfile .
+
+      - name: Log into registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login --username "${{ secrets.DOCKER_USER }}" --password "${{ secrets.DOCKER_PASS }}"
+
+
+      - name: Push image for master branch
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: |
+          VERSION=${GITHUB_SHA}
+
+          echo IMAGE=$IMAGE
+          echo VERSION=$VERSION
+
+          docker tag "$IMAGE" "$REGISTRY/$IMAGE:$VERSION"
+          docker push "$REGISTRY/$IMAGE:$VERSION"

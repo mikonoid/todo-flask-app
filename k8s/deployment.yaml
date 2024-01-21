@@ -1,8 +1,12 @@
+# Namespace
 apiVersion: v1
 kind: Namespace
 metadata:
   name: todo
+
 ---
+
+# Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -10,18 +14,24 @@ metadata:
   namespace: todo
 spec:
   replicas: 3
+  selector:
+    matchLabels:
+      app: todo
   template:
     metadata:
       labels:
         app: todo
     spec:
       containers:
-      - image: index.docker.io/mk51/todo:latest
+      - image: mk51/todo-flask-app:latest
         imagePullPolicy: Always
         name: todo
         ports:
         - containerPort: 5000
+
 ---
+
+# Service
 apiVersion: v1
 kind: Service
 metadata:
