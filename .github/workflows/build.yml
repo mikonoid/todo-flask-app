@@ -54,3 +54,27 @@ jobs:
 
           docker tag "$IMAGE" "$REGISTRY/$IMAGE:$VERSION"
           docker push "$REGISTRY/$IMAGE:$VERSION"
+
+      - name: Update values.yaml
+        run: |
+          cd helm
+          sed -i 's|image:.*|image: mk51/todo-flask-app:'${{ github.sha }}'|' k8s/deployment.yaml 
+          git config --global user.name 'mikonoid'
+          git config --global user.email 'actions@github.com'
+          git add values.yaml
+          git commit -m "Update values.yaml"
+          git push
+
+
+      # - name: check for changes
+      #   run: git status
+      # - name: commit changed files
+      #   run: |
+      #     git config --local user.name "mikonoid"
+      #     git add deployment.yml
+      #     git commit -m "Auto updating deployment with tag ${GITHUB_SHA}"
+      # - name: Push changes
+      #   uses: ad-m/github-push-action@master
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     force: true
