@@ -23,7 +23,7 @@ spec:
         app: todo
     spec:
       containers:
-      - image: mk51/todo-flask-app:ea76e61005070ea3e557c8d988dc3793cecf300d
+      - image: mk51/todo-flask-app:cfb6d272847ab9c80351b6885e734b2ec3df7c28
         imagePullPolicy: Always
         name: todo
         ports:
