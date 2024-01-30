@@ -1,0 +1,14 @@
+kubernetesClusterDomain: cluster.local
+todo:
+  ports:
+  - nodePort: 30000
+    port: 80
+    protocol: TCP
+    targetPort: 5000
+  replicas: 3
+  todo:
+    image:
+      repository: mk51/todo-flask-app
+      tag: cfb6d272847ab9c80351b6885e734b2ec3df7c28
+    imagePullPolicy: Always
+  type: NodePort
