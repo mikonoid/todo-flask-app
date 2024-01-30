@@ -9,6 +9,6 @@ todo:
   todo:
     image:
       repository: mk51/todo-flask-app
-      tag:fe4a7c87a0c8741e8b8c2d86a4aa183fab6a10e8
+      tag: fa19aa4b6ff9ba14e928d69e06cacd46c8adfeaa
     imagePullPolicy: Always
   type: NodePort
