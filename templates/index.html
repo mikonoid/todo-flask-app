@@ -1,41 +1,44 @@
-{% extends './base.html'%}
+<!-- templates/index.html -->
+
+{% extends 'base.html' %}
 
 {% block title %}
 <title> TODO list </title>
 {% endblock %}
 
 {% block body %}
-<h1>Test app on Python+Flask+SQLite</h1>
-<hr>
-<form action="/task" method="post">
-	<div class="form-group">
-		<label for=""></label>
-		<input type="text" class="form-control" name="task" required>
-	</div>
-	<button class="submit">Save</button>
-</form>
-
-<br>
-<h2> Tasks </h2>
-<hr>
-<ul>
-	{% for task in t %}
-		<li>
-			{% if task.status == 'complete' %}
-			<span style="text-decoration: line-through">
-			{% else %}
-			<span>
-			{% endif %}
-			{{ task.task }} -
-			</span>
-			{% if task.status == 'complete' %}
-			<a href="/uncomplete/{{ task.idTask }}">Todo</a> |
-			{% else %}
-			<a href="/complete/{{ task.idTask }}">Done</a> |
-			{% endif %}
-			<a href="/deletetask/{{ task.idTask }}">Remove</a> |
-			<a href="/updatetask/{{ task.idTask }}">Edit</a>
-		</li>
-	{% endfor %}
-</ul>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <h1>Task List</h1>
+            <ul class="list-group">
+                {% for task in t %}
+                    <li class="list-group-item">
+                        <span style="{% if task.status == 'complete' %}text-decoration: line-through{% endif %}">
+                            {{ task.task }}
+                        </span>
+                        {% if task.status == 'complete' %}
+                            <a href="{{ url_for('uncomplete', taskID=task.id) }}" class="btn btn-warning btn-sm float-end">Todo</a>
+                        {% else %}
+                            <a href="{{ url_for('complete', taskID=task.id) }}" class="btn btn-success btn-sm float-end">Done</a>
+                        {% endif %}
+                        <a href="{{ url_for('deleteTask', taskID=task.id) }}" class="btn btn-danger btn-sm float-end">Remove</a>
+                        <a href="{{ url_for('updateTask', taskID=task.id) }}" class="btn btn-primary btn-sm float-end">Edit</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <h1>Add New Task</h1>
+            <form action="{{ url_for('tasks') }}" method="post">
+                {{ form.hidden_tag() }}
+                <div class="mb-3">
+                    {{ form.task.label(class="form-label") }}
+                    {{ form.task(class="form-control") }}
+                </div>
+                <button type="submit" class="btn btn-primary">Add Task</button>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

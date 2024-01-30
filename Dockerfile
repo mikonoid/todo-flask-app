@@ -11,9 +11,7 @@ RUN apk add --update --no-cache \
     && pip3 install virtualenv \
     && rm -rf /var/cache/apk/*
 
-RUN virtualenv venv
 
-ENV PATH="/app/venv/bin:$PATH"
 
 RUN pip install -r requirements.txt
 

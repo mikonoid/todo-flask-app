@@ -1,3 +1,2 @@
-SQLALCHEMY_DATABASE_URI = 'sqlite:////app/db/todo.db'
-TEMPLATES_AUTO_RELOAD = True
-SQLALCHEMY_TRACK_MODIFICATIONS = True
+MONGO_URI = 'mongodb://root:pass@test_mongodb:27017'
+MONGO_DB = 'todo_db'
