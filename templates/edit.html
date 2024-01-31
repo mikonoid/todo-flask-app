@@ -1,21 +1,11 @@
+
 <!-- templates/edit.html -->
-
-{% extends 'base.html'%}
-
-{% block title %}
-<title> Edit task - TODO List</title>
-{% endblock %}
-
-{% block body%}
-<div class="container">
-    <h1>Edit Task</h1>
-    <form action="{{ url_for('do_updatetask') }}" method="post">
-        {{ task.hidden_tag() }}
-        <div class="mb-3">
-            {{ task.task.label(class="form-label") }}
-            {{ task.task(class="form-control") }}
-        </div>
-        <button type="submit" class="btn btn-primary">Save</button>
-    </form>
-</div>
-{% endblock %}
+<form method="post" action="{{ url_for('do_updatetask', taskID=task._id) }}">
+    {{ form.hidden_tag() }}
+    <input type="hidden" name="taskID" value="{{ task._id }}">
+    <div class="mb-3">
+        {{ form.task.label(class="form-label") }}
+        {{ form.task(class="form-control") }}
+    </div>
+    <button type="submit" class="btn btn-primary">Update Task</button>
+</form>

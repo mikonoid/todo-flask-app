@@ -3,14 +3,19 @@ from flask import Flask, render_template, request, redirect, url_for
 from pymongo import MongoClient
 from datetime import datetime
 import math
-from forms import TaskForm
+from flask_wtf import Form 
+from forms import TaskForm, UpdateTaskForm
+from bson import ObjectId
+import os
+
 
 # Init flask
 application = Flask(__name__)
 app = application
 
 # Set secret key for CSRF protection
-app.config['SECRET_KEY'] = 'sdfsdfsdfsdf345dsfgsdf'  # Replace 'your_secret_key' with a secure key
+SECRET_KEY = os.urandom(32)
+app.config['SECRET_KEY'] = SECRET_KEY
 # Set MongoDB URI and DB from config
 app.config.from_object('config')
 app.config.from_pyfile('config.py')
@@ -62,34 +67,41 @@ def getTask(id):
 # Update a task
 @app.route('/updatetask/<taskID>', methods=['GET'])
 def updateTask(taskID):
-    the_task = db.tasks.find_one({'_id': taskID})
-    return render_template('edit.html', task=the_task)
+    the_task = db.tasks.find_one({'_id': ObjectId(taskID)})
+
+    # Create an instance of the UpdateTaskForm
+    form = UpdateTaskForm()
+
+    # Pre-populate the form with the existing task data
+    form.task.data = the_task['task']
+
+    return render_template('edit.html', task=the_task, form=form)
 
 @app.route('/do_updatetask', methods=['POST'])
 def do_updatetask():
-    task_id = request.form['taskID']
+    task_id = request.form['taskID']  # Access 'taskID' from the form data
     update_task = {
         'task': request.form['task'],
     }
-    db.tasks.update_one({'_id': task_id}, {'$set': update_task})
+    db.tasks.update_one({'_id': ObjectId(task_id)}, {'$set': update_task})
     return redirect(url_for('index'))
 
 # Delete a task
 @app.route('/deletetask/<taskID>', methods=['GET'])
 def deleteTask(taskID):
-    db.tasks.delete_one({'_id': taskID})
+    db.tasks.delete_one({'_id': ObjectId(taskID)})
     return redirect(url_for('index'))
 
 # Complete a task
 @app.route('/complete/<taskID>')
 def complete(taskID):
-    db.tasks.update_one({'_id': taskID}, {'$set': {'status': 'complete'}})
+    db.tasks.update_one({'_id': ObjectId(taskID)}, {'$set': {'status': 'complete'}})
     return redirect(url_for('index'))
 
 # Uncomplete a task
 @app.route('/uncomplete/<taskID>')
 def uncomplete(taskID):
-    db.tasks.update_one({'_id': taskID}, {'$set': {'status': 'uncomplete'}})
+    db.tasks.update_one({'_id': ObjectId(taskID)}, {'$set': {'status': 'uncomplete'}})
     return redirect(url_for('index'))
 
 if __name__ == '__main__':
