@@ -3,7 +3,7 @@ mongodb:
   mongodb:
     image:
       repository: mongo
-      tag: latest
+      tag: 564babbdb20bd57ef48b9124f1cfe6f5e83a5f52
   ports:
   - port: 27017
     targetPort: 27017
@@ -29,6 +29,6 @@ todo:
       mongoUri: mongodb://$(MONGO_USERNAME):$(MONGO_PASSWORD)@mongodb.todo.svc.cluster.local:27017
     image:
       repository: mk51/todo-flask-app
-      apptag: ba939aeb0d2a9473bf4c97ecc9e75c428879ed58
+      apptag: 564babbdb20bd57ef48b9124f1cfe6f5e83a5f52
     imagePullPolicy: Always
   type: NodePort
