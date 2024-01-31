@@ -19,13 +19,14 @@ data:
 
 ---
 
-# MongoDB Deployment
+# MongoDB StatefulSet
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: mongodb
   namespace: todo
 spec:
+  serviceName: "mongodb"
   replicas: 1
   selector:
     matchLabels:
@@ -36,8 +37,8 @@ spec:
         app: mongodb
     spec:
       containers:
-      - image: mongo:latest
-        name: mongodb
+      - name: mongodb
+        image: mongo:latest
         ports:
         - containerPort: 27017
         env:
@@ -54,9 +55,14 @@ spec:
         volumeMounts:
         - name: mongodb-storage
           mountPath: /data/db
-  volumes:
-  - name: mongodb-storage
-    emptyDir: {}
+  volumeClaimTemplates:
+  - metadata:
+      name: mongodb-storage
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi  # Adjust storage size as needed
 
 ---
 
@@ -108,3 +114,19 @@ spec:
     protocol: TCP
   selector:
     app: todo
+
+---
+
+# MongoDB Headless Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb
+  namespace: todo
+spec:
+  clusterIP: None
+  selector:
+    app: mongodb
+  ports:
+  - port: 27017
+    targetPort: 27017

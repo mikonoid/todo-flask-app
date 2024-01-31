@@ -18,10 +18,16 @@ spec:
     spec:
       containers:
       - env:
+        - name: MONGO_URI
+          value: {{ quote .Values.todo.todo.env.mongoUri }}
+        - name: MONGO_DB
+          value: {{ quote .Values.todo.todo.env.mongoDb }}
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
-        image: {{ .Values.todo.todo.image.repository }}:{{ .Values.todo.todo.image.tag
-          | default .Chart.AppVersion }}
+        envFrom:
+        - secretRef:
+            name: {{ include "todo-chart.fullname" . }}-mongodb-secret
+        image: {{ .Values.todo.todo.image.repository }}:{{ .Values.todo.todo.image.apptag | default .Chart.AppVersion }}
         imagePullPolicy: {{ .Values.todo.todo.imagePullPolicy }}
         name: todo
         ports:

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "todo-chart.fullname" . }}-mongodb
+  labels:
+  {{- include "todo-chart.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.mongodb.type }}
+  selector:
+    app: mongodb
+  {{- include "todo-chart.selectorLabels" . | nindent 4 }}
+  ports:
+	{{- .Values.mongodb.ports | toYaml | nindent 2 -}}
