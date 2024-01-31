@@ -27,8 +27,7 @@ spec:
         envFrom:
         - secretRef:
             name: {{ include "todo.fullname" . }}-mongodb-secret
-        image: {{ .Values.todo.todo.image.repository }}:{{ .Values.todo.todo.image.tag
-          | default .Chart.AppVersion }}
+        image: {{ .Values.todo.todo.image.repository }}:{{ .Values.todo.todo.image.apptag | default .Chart.AppVersion }}
         imagePullPolicy: {{ .Values.todo.todo.imagePullPolicy }}
         name: todo
         ports:
