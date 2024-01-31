@@ -58,7 +58,7 @@ jobs:
       - name: Update values.yaml
         run: |
           cd k8s/todo-chart
-          sed -i 's|tag:.*|tag: '${{ github.sha }}'|' values.yaml
+          sed -i 's|apptag:.*|apptag: '${{ github.sha }}'|' values.yaml
           git config --global user.name 'mikonoid'
           git config --global user.email 'actions@github.com'
           git add values.yaml
