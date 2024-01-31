@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "todo-chart.fullname" . }}-todo
+  name: {{ include "todo.fullname" . }}-todo
   labels:
-  {{- include "todo-chart.labels" . | nindent 4 }}
+  {{- include "todo.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.todo.type }}
   selector:
     app: todo
-  {{- include "todo-chart.selectorLabels" . | nindent 4 }}
+  {{- include "todo.selectorLabels" . | nindent 4 }}
   ports:
 	{{- .Values.todo.ports | toYaml | nindent 2 -}}

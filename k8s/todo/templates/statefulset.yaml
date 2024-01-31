@@ -1,15 +1,15 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ include "todo-chart.fullname" . }}-mongodb
+  name: mongodb
   labels:
-  {{- include "todo-chart.labels" . | nindent 4 }}
+    app: mongodb
 spec:
-  replicas: {{ .Values.mongodb.replicas }}
+  replicas: 1
   selector:
     matchLabels:
       app: mongodb
-  serviceName: {{ include "todo-chart.fullname" . }}-mongodb
+  serviceName: mongodb
   template:
     metadata:
       labels:
@@ -21,16 +21,15 @@ spec:
           valueFrom:
             secretKeyRef:
               key: MONGO_USERNAME
-              name: {{ include "todo-chart.fullname" . }}-mongodb-secret
+              name: mongodb-secret
         - name: MONGO_INITDB_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
               key: MONGO_PASSWORD
-              name: {{ include "todo-chart.fullname" . }}-mongodb-secret
+              name: mongodb-secret
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
-        image: {{ .Values.mongodb.mongodb.image.repository }}:{{ .Values.mongodb.mongodb.image.tag
-          | default .Chart.AppVersion }}
+        image: {{ .Values.mongodb.mongodb.image.repository }}:{{ .Values.mongodb.mongodb.image.tag | default .Chart.AppVersion }}
         name: mongodb
         ports:
         - containerPort: 27017
@@ -46,5 +45,4 @@ spec:
     spec:
       accessModes:
       - ReadWriteOnce
-      resources: {{ .Values.mongodb.volumeClaims.mongodbStorage | toYaml | nindent
-        8 }}
+      resources: {{ .Values.mongodb.volumeClaims.mongodbStorage | toYaml | nindent 8 }}
