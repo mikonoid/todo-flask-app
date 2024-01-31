@@ -26,7 +26,7 @@ todo:
   todo:
     env:
       mongoDb: todo
-      mongoUri: mongodb://$(MONGO_USERNAME):$(MONGO_PASSWORD)@mongodb.todo.svc.cluster.local:27017
+      mongoUri: mongodb://$(MONGO_USERNAME):$(MONGO_PASSWORD)@todo-todo-chart-mongodb.todo.svc.cluster.local:27017
     image:
       repository: mk51/todo-flask-app
       apptag: b2d002cbc6774182257b0e518e001506d22112dc
