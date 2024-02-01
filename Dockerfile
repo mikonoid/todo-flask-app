@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY . /app
 
-COPY .env /app
+COPY ./.env /app
 
 RUN apk add --update --no-cache \
     python3 \
