@@ -20,11 +20,20 @@ app.config['SECRET_KEY'] = SECRET_KEY
 # app.config.from_object('config')
 # app.config.from_pyfile('config.py')
 
+# Load secrets from .env file
 secrets = dotenv_values(".env")
 
-# # Init MongoDB
-client = MongoClient(secrets["MONGO_URI"])
-db = client[secrets["MONGO_DB"]]
+# Verify existence of keys
+mongo_uri = secrets.get("MONGO_URI", None)
+mongo_db = secrets.get("MONGO_DB", None)
+
+if mongo_uri is None or mongo_db is None:
+    print("Missing MONGO_URI or MONGO_DB in .env file.")
+    # Handle the situation, exit or set default values as needed.
+
+# Initialize MongoDB
+client = MongoClient(mongo_uri)
+db = client[mongo_db]
 
 # Routes
 allTasks = []
