@@ -3,7 +3,6 @@ FROM alpine:3.18
 WORKDIR /app
 
 COPY . /app
-RUN mv example.env .env
 
 RUN apk add --update --no-cache \
     python3 \
@@ -11,8 +10,6 @@ RUN apk add --update --no-cache \
     && pip3 install --upgrade pip \
     && pip3 install virtualenv \
     && rm -rf /var/cache/apk/*
-
-
 
 RUN pip install -r requirements.txt
 
