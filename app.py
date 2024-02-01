@@ -7,7 +7,7 @@ from flask_wtf import Form
 from forms import TaskForm, UpdateTaskForm
 from bson import ObjectId
 import os
-
+from dotenv import load_dotenv
 
 # Init flask
 application = Flask(__name__)
@@ -17,12 +17,17 @@ app = application
 SECRET_KEY = os.urandom(32)
 app.config['SECRET_KEY'] = SECRET_KEY
 # Set MongoDB URI and DB from config
-app.config.from_object('config')
-app.config.from_pyfile('config.py')
+# app.config.from_object('config')
+# app.config.from_pyfile('config.py')
 
-# Init MongoDB
-client = MongoClient(app.config['MONGO_URI'])
-db = client[app.config['MONGO_DB']]
+load_dotenv()
+
+client = os.getenv("MONGO_URI")
+db = os.getenv("MONGO_DB")
+
+# # Init MongoDB
+# client = MongoClient(app.config['MONGO_URI'])
+# db = client[app.config['MONGO_DB']]
 
 # Routes
 allTasks = []
