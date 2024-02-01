@@ -20,8 +20,6 @@ app.config['SECRET_KEY'] = SECRET_KEY
 # app.config.from_object('config')
 # app.config.from_pyfile('config.py')
 
-load_dotenv()
-
 secrets = dotenv_values(".env")
 
 # # Init MongoDB
