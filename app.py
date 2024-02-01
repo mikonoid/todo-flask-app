@@ -8,6 +8,7 @@ from forms import TaskForm, UpdateTaskForm
 from bson import ObjectId
 import os
 from dotenv import dotenv_values
+from dotenv import load_dotenv
 
 # Init flask
 application = Flask(__name__)
@@ -21,17 +22,13 @@ app.config['SECRET_KEY'] = SECRET_KEY
 # app.config.from_pyfile('config.py')
 
 # Load secrets from .env file
-secrets = dotenv_values(".env")
-
-# Verify existence of keys
-mongo_uri = secrets.get("MONGO_URI", None)
-mongo_db = secrets.get("MONGO_DB", None)
-
-if mongo_uri is None or mongo_db is None:
-    print("Missing MONGO_URI or MONGO_DB in .env file.")
-    # Handle the situation, exit or set default values as needed.
+load_dotenv()
 
 # Initialize MongoDB
+
+mongo_uri = os.getenv("MONGO_URI")
+mongo_db = os.getenv("MONGO_DB")
+
 client = MongoClient(mongo_uri)
 db = client[mongo_db]
 
