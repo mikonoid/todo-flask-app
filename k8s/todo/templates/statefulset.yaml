@@ -17,6 +17,8 @@ spec:
     spec:
       containers:
       - env:
+        - name: MONGO_INITDB_DATABASE
+          value: todo
         - name: MONGO_INITDB_ROOT_USERNAME
           valueFrom:
             secretKeyRef:
