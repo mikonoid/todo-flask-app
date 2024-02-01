@@ -3,7 +3,7 @@ FROM alpine:3.18
 WORKDIR /app
 
 COPY . /app
-
+RUN mv example.env .env
 
 RUN apk add --update --no-cache \
     python3 \
