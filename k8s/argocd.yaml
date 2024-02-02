@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: todo
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: todo
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: k8s/todo/
+    repoURL: 'https://github.com/mikonoid/todo-flask-app'
+    targetRevision: HEAD
+    helm:
+      values: |-
+        mongodbSecret:
+          mongoPassword: ""
+          mongoUsername: ""
+  sources: []
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
