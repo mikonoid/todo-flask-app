@@ -29,6 +29,6 @@ todo:
       mongoUri: mongodb://$(MONGO_USERNAME):$(MONGO_PASSWORD)@mongodb:27017
     image:
       repository: mk51/todo-flask-app
-      apptag: 27ac7de0ae26fb8c42b16cd9509e602eb6e792b6
+      apptag: 65dd0388143d9022b4a57fd67c7690645ed6e4b9
     imagePullPolicy: Always
   type: NodePort
