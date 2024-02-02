@@ -1,43 +1,43 @@
-name: Get PR and comment
-on:
-  push:
-    branches:
-      - master
-  pull_request:
-    types: [opened, reopened, edited, synchronize]
+# name: Get PR and comment
+# on:
+#   push:
+#     branches:
+#       - master
+#   pull_request:
+#     types: [opened, reopened, edited, synchronize]
 
-jobs:
-  test_pr:
-    name: Test PR comment
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/github-script@v6
-      id: get_issue_number
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        script: |
-          if (context.issue.number) {
-            // Return issue number if present
-            return context.issue.number;
-          } else {
-            // Otherwise return issue number from commit
-            return (
-              await github.rest.repos.listPullRequestsAssociatedWithCommit({
-                commit_sha: context.sha,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-              })
-            ).data[0].number;
-          }
-        result-encoding: string
-    - name: Issue number
-      run: echo '${{steps.get_issue_number.outputs.result}}'
+# jobs:
+#   test_pr:
+#     name: Test PR comment
+#     runs-on: ubuntu-latest
+#     steps:
+#     - uses: actions/github-script@v6
+#       id: get_issue_number
+#       with:
+#         github-token: ${{ secrets.GITHUB_TOKEN }}
+#         script: |
+#           if (context.issue.number) {
+#             // Return issue number if present
+#             return context.issue.number;
+#           } else {
+#             // Otherwise return issue number from commit
+#             return (
+#               await github.rest.repos.listPullRequestsAssociatedWithCommit({
+#                 commit_sha: context.sha,
+#                 owner: context.repo.owner,
+#                 repo: context.repo.repo,
+#               })
+#             ).data[0].number;
+#           }
+#         result-encoding: string
+#     - name: Issue number
+#       run: echo '${{steps.get_issue_number.outputs.result}}'
 
-    - name: Comment PR
-      uses: thollander/actions-comment-pull-request@v2
-      with:
-        message: |
-          test ${{ github.sha }} :wave:
-        pr_number: ${{steps.get_issue_number.outputs.result}}
-        reactions: eyes, rocket
-        comment_tag: test
+#     - name: Comment PR
+#       uses: thollander/actions-comment-pull-request@v2
+#       with:
+#         message: |
+#           test ${{ github.sha }} :wave:
+#         pr_number: ${{steps.get_issue_number.outputs.result}}
+#         reactions: eyes, rocket
+#         comment_tag: test
