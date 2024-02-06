@@ -13,9 +13,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    - name: Install azcopy
+      run: |
+        echo "installing azcopy"
+        sudo mkdir -p /home/azcopy/
+        curl -L https://aka.ms/downloadazcopy-v10-linux | tar -zxf - --directory /home/azcopy/
+        sudo mv $(find /home/azcopy/ -type f -name azcopy) /usr/bin/
 
     - name: Sync storage
       uses: kheiakiyama/install-azcopy-action@v1
       with:
         inlineScript: |
             azcopy copy k8s "https://$STORAGE_ACCOUNT_NAME.file.core.windows.net/$FILE_SHARE_NAME/${{ secrets.SAS_TOKEN }}" --recursive --exclude-path .git
+
+    - name: Run Sync azcopy
+      run: |
+        azcopy copy k8s/ "https://$STORAGE_ACCOUNT_NAME.file.core.windows.net/$FILE_SHARE_NAME/${{ secrets.SAS_TOKEN }}" --recursive --exclude-path .git
