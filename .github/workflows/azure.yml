@@ -1,4 +1,4 @@
-name: Blob storage website CI
+name: Upload static content to fileshare
 
 on:
     push:
