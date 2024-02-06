@@ -1,0 +1,21 @@
+name: Blob storage website CI
+
+on:
+    push:
+        branches: [ main ]
+
+env:
+  STORAGE_ACCOUNT_NAME: testmikeivanovsa 
+  FILE_SHARE_NAME: docs-cdh
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Sync storage
+      uses: azure/CLI@v1
+      with:
+        inlineScript: |
+            azcopy copy k8s "https://$STORAGE_ACCOUNT_NAME.file.core.windows.net/$FILE_SHARE_NAME/${{ secrets.SAS_TOKEN }}" --recursive --exclude-path .git
