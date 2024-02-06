@@ -22,5 +22,8 @@ jobs:
 
 
     - name: Run Sync azcopy
+      env:
+        STORAGE_ACCOUNT_NAME: testmikeivanovsa 
+        FILE_SHARE_NAME: docs-cdh
       run: |
-        azcopy copy k8s/ "https://$STORAGE_ACCOUNT_NAME.file.core.windows.net/$FILE_SHARE_NAME/${{ secrets.SAS_TOKEN }}" --recursive --exclude-path .git
+        azcopy copy . "https://$STORAGE_ACCOUNT_NAME.file.core.windows.net/$FILE_SHARE_NAME/${{ secrets.SAS_TOKEN }}" --recursive --exclude-path .git
