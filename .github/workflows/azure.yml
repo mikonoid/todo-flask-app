@@ -22,7 +22,7 @@ jobs:
       env:
         STORAGE_ACCOUNT_NAME: testmikeivanovsa 
         FILE_SHARE_NAME: markdown
-        SYNC_FOLDER: .
+        SYNC_FOLDER: templates/
       run: |
         azcopy copy $SYNC_FOLDER "https://$STORAGE_ACCOUNT_NAME.file.core.windows.net/$FILE_SHARE_NAME/${{ secrets.SAS_TOKEN }}" --recursive --exclude-path .git
         azcopy sync $SYNC_FOLDER "https://$STORAGE_ACCOUNT_NAME.file.core.windows.net/$FILE_SHARE_NAME/$(basename $SYNC_FOLDER)/$SAS_TOKEN" --recursive=true --delete-destination=true --compare-hash=MD5 --exclude-path .git
