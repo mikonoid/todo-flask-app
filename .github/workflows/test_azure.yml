@@ -1,0 +1,23 @@
+name: Blob storage website CI
+
+on:
+    push:
+        branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: azure/login@v1
+      with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Upload to blob storage
+      uses: azure/CLI@v1
+      with:
+        inlineScript: |
+            az storage account generate-sas --account-name devportaldemosa --account-key ${{ secrets.SA_key }} --resource-types sco --services bfqt --permissions racwdl --expiry 2050-01-01
+
+
+  
