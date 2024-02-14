@@ -1,4 +1,4 @@
-name: Blob storage website CI
+name: Azure login and Get SAS
 
 on:
     push:
